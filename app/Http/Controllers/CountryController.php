@@ -220,6 +220,8 @@ class CountryController extends BaseController{
         if(!isset($country->id)){
             return ['success' => false, 'error'=> 'unable to find country'];
         }
+        $country->name = $input['name'];
+        $country->capital = $input['capital'];
         $country->region_id = $region->id;
 
         CountryCode::where('country_id', $country->id)->delete();

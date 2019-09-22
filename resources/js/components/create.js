@@ -6,12 +6,17 @@ var new_country_validation = {
     'languages' : '^.{2,45}$',
     'dialling_codes' : '^.{1,8}$',
     'region' : '^.{2,45}$',
-    'timezones' : '^-?\\d{1,2}.?\\d{1,2}?$',
+    'timezones' : '^-?\\d{1,2}(\.?\\d{1,2})?$',
 }
 
 var createError = function(error_message){
     $('#create_modal_error_message').find('span.error-text').text(error_message);
     $('#create_modal_error_message').fadeIn();
+}
+
+var editError = function(error_message){
+    $('#edit_modal_error_message').find('span.error-text').text(error_message);
+    $('#edit_modal_error_message').fadeIn();
 }
 
 var validate = function(value, regex){
@@ -141,7 +146,8 @@ $(function(){
 
     });
 
-    $('.edit-country-modal').on('click', '#edit_country_submit', function(){
+    $('body').on('click', '.edit-country-modal #edit_country_submit', function(){
+        console.log($(this).data('country-id'));
         var data = {
             'name' : $('#edit_country_name').val(),
             'codes' : $('#edit_country_codes').val(),
@@ -180,11 +186,10 @@ $(function(){
                 pass = false;
             }
             if(!pass){
-                createError('Please enter '+(key.charAt(key.length-1) != 's' ? 'a' : '')+' valid ' + key);
+                editError('Please enter '+(key.charAt(key.length-1) != 's' ? 'a' : '')+' valid ' + key);
                 return false;
             }
         })
-
         if(pass){
 
             makeRequest('/country/submit_edit', data, function(response){
@@ -197,7 +202,7 @@ $(function(){
                     if(isset(response.error)){
                         error_message = response.error;
                     }
-                    createError(error_message);
+                    editError(error_message);
                 }
             });
 

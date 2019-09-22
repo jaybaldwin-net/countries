@@ -86,10 +86,12 @@
                         <label for="edit_country_timezones" class="col-form-label">Timezones (UTC offset):</label>
                         @if($country != false)
                             @foreach($country->timezones()->get() as $timezone)
-                                <div class="slider-container">
-                                    <input type="range" min="-12" max="14" value="{{str_replace('UTC', '', str_replace(':', '.', $timezone->name))}}" step='0.25' class="slider timezones" id="edit_country_timezones">
-                                    <input type="number" min="-12" max="14" class="form-control slider-output" value='{{str_replace('UTC', '', str_replace(':', '.', $timezone->name))}}' id="edit_country_timezone">
-                                </div>
+                                @if(strlen(str_replace('UTC', '', str_replace(':', '.', str_replace('+', '', $timezone->name)))))
+                                    <div class="slider-container">
+                                        <input type="range" min="-12" max="14" value="{{str_replace('UTC', '', str_replace(':', '.', str_replace('+', '', $timezone->name)))}}" step='0.25' class="slider timezones" id="edit_country_timezones">
+                                        <input type="number" min="-12" max="14" class="form-control slider-output" value='{{str_replace('UTC', '', str_replace(':', '.', str_replace('+', '', $timezone->name)))}}' id="edit_country_timezone">
+                                    </div>
+                                @endif
                             @endforeach
                         @else
                             <div class="slider-container">
